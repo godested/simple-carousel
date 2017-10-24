@@ -3,4 +3,11 @@ require.config({
     'src': '../src'
   }
 });
-require(['views/carousel', 'utils'], jasmineRun);
+
+var specsList = [
+  'views/carousel',
+  'models/carousel',
+  'utils'
+];
+
+require([specsList], jasmineRun);
