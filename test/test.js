@@ -3,4 +3,4 @@ require.config({
     'src': '../src'
   }
 });
-require(['views/carousel'], jasmineRun);
+require(['views/carousel', 'utils'], jasmineRun);
