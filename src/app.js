@@ -4,7 +4,7 @@ define(['views/carousel'], function (CarouselView) {
 
   return {
     start: function () {
-      if(container !== null){
+      if (container !== null) {
         container.appendChild(carousel.render().el);
       }
     }
