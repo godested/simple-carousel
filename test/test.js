@@ -10,4 +10,4 @@ var specsList = [
   'utils'
 ];
 
-require([specsList], jasmineRun);
+require(specsList, jasmineRun);
