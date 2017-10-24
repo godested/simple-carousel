@@ -18,11 +18,17 @@ define([], function () {
     slidesList: 'carousel-slides-list'
   };
 
+  CarouselView.prototype.textes = {
+    btnNext: 'Next',
+    btnPrev: 'Prev',
+    defaultText: ''
+  };
+
   CarouselView.prototype.createLayout = function () {
     this.el = document.createElement('div');
 
-    this.btnNext = document.createElement('button');
-    this.btnPrev = document.createElement('button');
+    this.btnNext = this.createButton('btnNext');
+    this.btnPrev = this.createButton('btnPrev');
 
     this.viewBox = document.createElement('div');
 
@@ -48,6 +54,13 @@ define([], function () {
     }.bind(this));
 
     return this;
+  };
+
+  CarouselView.prototype.createButton = function (textKey) {
+    var button = document.createElement('button');
+    button.innerHTML = this.textes[textKey] || this.textes.defaultText;
+
+    return button;
   };
 
   CarouselView.prototype.render = function () {

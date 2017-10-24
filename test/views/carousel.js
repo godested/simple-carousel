@@ -41,6 +41,23 @@ define([resource], function (CarouselView) {
       });
     });
 
+    describe('.createButton', function () {
+      it('creates button with proper text', function () {
+        var buttonName = 'btnNext';
+        var button = this.carouselView.createButton(buttonName);
+
+        expectToCreateDOMElement(button);
+        expect(button.innerHTML).toBe(this.carouselView.textes[buttonName]);
+      });
+
+      it('creates button with default text if not specified', function () {
+        var button = this.carouselView.createButton();
+
+        expectToCreateDOMElement(button);
+        expect(button.innerHTML).toBe(this.carouselView.textes.defaultText);
+      });
+    });
+
     describe('.assignClassNames', function () {
       beforeEach(function () {
         this.carouselView.createLayout().assignClassNames();
