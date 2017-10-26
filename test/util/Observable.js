@@ -3,14 +3,8 @@
   
   define([resource], function (Observable) {
     beforeEach(function () {
-      this.observable = new Observable();
+      this.subject = new Observable();
     });
-    
-    var itBehavesLikeChainableMethod = function (callback) {
-      it('is chainable method', function () {
-        expect(callback.call(this)).toBe(this.observable);
-      });
-    };
     
     describe(resource, function () {
       it('should be defined', function () {
@@ -19,70 +13,62 @@
       
       describe('.observersCount', function () {
         it('returns actual count of observers', function () {
-          expect(this.observable._observers.length).toBe(this.observable.observersCount);
+          expect(this.subject._observers.length).toBe(this.subject.observersCount);
         });
       });
       
       describe('.setChanged()', function () {
         it('sets Observable state to changed', function () {
-          this.observable.setChanged();
-          expect(this.observable._hasChanged).toBe(true);
+          this.subject.setChanged();
+          expect(this.subject._hasChanged).toBe(true);
         });
         
-        itBehavesLikeChainableMethod(function () {
-          return this.observable.setChanged();
-        });
+        itBehavesLikeChainableMethod('setChanged');
       });
       
       describe('.hasChanged()', function () {
         it('returns true if Observable state was changed', function () {
-          expect(this.observable.hasChanged()).toBe(false);
-          this.observable.setChanged();
-          expect(this.observable.hasChanged()).toBe(true);
+          expect(this.subject.hasChanged()).toBe(false);
+          this.subject.setChanged();
+          expect(this.subject.hasChanged()).toBe(true);
         });
       });
       
       describe('.clearChanged()', function () {
         it('sets Observable state to not changed', function () {
-          this.observable.setChanged();
-          this.observable.clearChanged();
+          this.subject.setChanged();
+          this.subject.clearChanged();
           
-          expect(this.observable.hasChanged()).toBe(false);
+          expect(this.subject.hasChanged()).toBe(false);
         });
         
-        itBehavesLikeChainableMethod(function () {
-          return this.observable.clearChanged();
-        });
+        itBehavesLikeChainableMethod('clearChanged');
       });
       
       describe('.addObserver(observer)', function () {
         it('add callback to the array of observers', function () {
           var observer = function () {};
-          this.observable.addObserver(observer);
-          expect(this.observable.observersCount).toBe(1);
+          this.subject.addObserver(observer);
+          expect(this.subject.observersCount).toBe(1);
         });
         
-        itBehavesLikeChainableMethod(function () {
-          return this.observable.addObserver(new Function());
-        });
+        itBehavesLikeChainableMethod('addObserver');
       });
       
       describe('.removeObserver(observer)', function () {
         it('removes observer from observers list', function () {
           var observer = function () {};
           
-          this.observable.addObserver(observer);
-          this.observable.addObserver(observer);
-          this.observable.addObserver(observer);
+          this.subject.addObserver(observer);
+          this.subject.addObserver(observer);
+          this.subject.addObserver(observer);
           
-          this.observable.removeObserver(observer);
+          this.subject.removeObserver(observer);
           
-          expect(this.observable.observersCount).toBe(0);
+          expect(this.subject.observersCount).toBe(0);
         });
         
-        itBehavesLikeChainableMethod(function () {
-          return this.observable.removeObserver(new Function());
-        });
+        itBehavesLikeChainableMethod('removeObserver');
       });
       
       describe('.notifyObservers(data)', function () {
@@ -95,22 +81,20 @@
           spyOn(this.test, 'observer');
         });
         
-        itBehavesLikeChainableMethod(function () {
-          return this.observable.notifyObservers();
-        });
-  
+        itBehavesLikeChainableMethod('notifyObservers');
+        
         it('does not invoke observers if state was not changed', function () {
-          this.observable.addObserver(this.test.observer);
-          this.observable.clearChanged();
-          this.observable.notifyObservers();
+          this.subject.addObserver(this.test.observer);
+          this.subject.clearChanged();
+          this.subject.notifyObservers();
           
           expect(this.test.observer).not.toHaveBeenCalled();
         });
         
         it('invokes all observers with passed data', function () {
-          this.observable.addObserver(this.test.observer);
-          this.observable.setChanged();
-          this.observable.notifyObservers(this.test.data);
+          this.subject.addObserver(this.test.observer);
+          this.subject.setChanged();
+          this.subject.notifyObservers(this.test.data);
           
           expect(this.test.observer).toHaveBeenCalledWith(this.test.data);
         });
