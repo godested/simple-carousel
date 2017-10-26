@@ -1,6 +1,6 @@
 (function () {
-  var resource = 'src/models/carousel';
-  define([resource], function (CarouselModel) {
+  var resource = 'src/models/Carousel';
+  define([resource, 'src/errors'], function (CarouselModel, errors) {
     describe(resource, function () {
       beforeEach(function () {
         this.subject = new CarouselModel();
@@ -17,6 +17,35 @@
         });
       });
       
+      describe('.items=', function () {
+        it('sets models items', function () {
+          var items = ['test'];
+          this.subject.items = items;
+          
+          expect(this.subject._items).toEqual(items);
+        });
+        
+        it('notifies observers with passed items', function () {
+          var test = {
+            observer: function () {}
+          };
+          
+          spyOn(test, 'observer');
+          
+          this.subject.addObserver(test.observer);
+          
+          this.subject.items = [1, 2, 3];
+          
+          expect(test.observer).toHaveBeenCalledWith(this.subject.items);
+        });
+        
+        it('throws exception if passed value is not an array', function () {
+          expect(function () {
+            this.subject.items = 10;
+          }.bind(this)).toThrow(new TypeError(errors.TYPE_ERROR.ARRAY_EXPECTED));
+        });
+      });
+      
       describe('.addItem(item)', function () {
         it('adds item to the model items array', function () {
           this.subject.addItem('someItem');
@@ -24,6 +53,20 @@
         });
         
         itBehavesLikeChainableMethod('addItem');
+        
+        it('notifies observers with passed items', function () {
+          var test = {
+            observer: function () {}
+          };
+          
+          spyOn(test, 'observer');
+          
+          this.subject.addObserver(test.observer);
+          
+          this.subject.addItem('item');
+          
+          expect(test.observer).toHaveBeenCalledWith(this.subject.items);
+        });
       });
     });
   });
