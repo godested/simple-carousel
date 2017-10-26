@@ -1,5 +1,11 @@
-define([], function () {
-  var CarouselView = function CarouselView() {
+define(['text!src/templates/carousel.html', 'src/utils'], function (carouselTemplate, utils) {
+  var defaultSettings = {
+    template: carouselTemplate
+  };
+
+  var CarouselView = function CarouselView(settings) {
+    settings = utils.isObject(settings) || defaultSettings;
+
     this.el = null;
 
     this.btnNext = null;
@@ -8,63 +14,36 @@ define([], function () {
     this.viewBox = null;
 
     this.slidesList = null;
+
+    this.template = settings.template;
   };
 
   CarouselView.prototype.classNames = {
-    el: 'carousel',
-    btnNext: 'carousel-btn-next',
-    btnPrev: 'carousel-btn-prev',
-    viewBox: 'carousel-view-box',
-    slidesList: 'carousel-slides-list'
-  };
-
-  CarouselView.prototype.textes = {
-    btnNext: 'Next',
-    btnPrev: 'Prev',
-    defaultText: ''
+    el: 'carousel'
   };
 
   CarouselView.prototype.createLayout = function () {
     this.el = document.createElement('div');
+    this.el.className = this.classNames.el;
 
-    this.btnNext = this.createButton('btnNext');
-    this.btnPrev = this.createButton('btnPrev');
+    this.el.innerHTML = this.template;
 
-    this.viewBox = document.createElement('div');
 
-    this.slidesList = document.createElement('ul');
-    this.viewBox.appendChild(this.slidesList);
-
-    this.el.appendChild(this.btnNext);
-    this.el.appendChild(this.viewBox);
-    this.el.appendChild(this.btnPrev);
-    return this;
+    return this.collectChildNodes();
   };
 
-  CarouselView.prototype.assignClassNames = function () {
-    var ownPropertyNames = Object.getOwnPropertyNames(this);
+  CarouselView.prototype.collectChildNodes = function () {
+    this.btnNext = this.el.querySelector('.carousel-btn-next');
+    this.btnPrev = this.el.querySelector('.carousel-btn-prev');
 
-    ownPropertyNames.forEach(function (propName) {
-      var node = this[propName];
-      var expectedClass = this.classNames[propName];
-
-      if (typeof expectedClass === 'string') {
-        node.className = expectedClass;
-      }
-    }.bind(this));
+    this.viewBox = this.el.querySelector('.carousel-view-box');
+    this.slidesList = this.el.querySelector('.carousel-view-box');
 
     return this;
-  };
-
-  CarouselView.prototype.createButton = function (textKey) {
-    var button = document.createElement('button');
-    button.innerHTML = this.textes[textKey] || this.textes.defaultText;
-
-    return button;
   };
 
   CarouselView.prototype.render = function () {
-    return this.createLayout().assignClassNames();
+    return this.createLayout();
   };
 
   return CarouselView;

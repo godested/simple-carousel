@@ -4,5 +4,5 @@ define(function () {
     isObject: function (value) {
       return value === Object(value);
     }
-  }
+  };
 });

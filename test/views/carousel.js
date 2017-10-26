@@ -40,40 +40,5 @@ define([resource], function (CarouselView) {
         expectToCreateDOMElement(this.carouselView.slidesList);
       });
     });
-
-    describe('.createButton', function () {
-      it('creates button with proper text', function () {
-        var buttonName = 'btnNext';
-        var button = this.carouselView.createButton(buttonName);
-
-        expectToCreateDOMElement(button);
-        expect(button.innerHTML).toBe(this.carouselView.textes[buttonName]);
-      });
-
-      it('creates button with default text if not specified', function () {
-        var button = this.carouselView.createButton();
-
-        expectToCreateDOMElement(button);
-        expect(button.innerHTML).toBe(this.carouselView.textes.defaultText);
-      });
-    });
-
-    describe('.assignClassNames', function () {
-      beforeEach(function () {
-        this.carouselView.createLayout().assignClassNames();
-      });
-
-      it('assigns correct classNames to elements', function () {
-        var ownProps = Object.getOwnPropertyNames(this.carouselView);
-        ownProps.forEach(function (propName) {
-          var property = this.carouselView[propName];
-          var expectedClassName = this.carouselView.classNames[propName] || '';
-
-          if (property instanceof HTMLElement && expectedClassName) {
-            expect(property.className).toEqual(expectedClassName);
-          }
-        }.bind(this));
-      });
-    });
   });
 });
