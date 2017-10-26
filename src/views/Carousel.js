@@ -1,4 +1,4 @@
-define(['src/models/carousel', 'text!src/templates/carousel.html', 'src/utils'],
+define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     function (CarouselModel, carouselTemplate, utils) {
       var defaultSettings = {
         template: carouselTemplate,
