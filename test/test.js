@@ -1,6 +1,7 @@
 require.config({
   paths: {
-    'src': '../src',
+    src: '../src',
+    test: './',
     text: '../lib/text'
   }
 });

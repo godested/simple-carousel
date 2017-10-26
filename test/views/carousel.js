@@ -1,12 +1,7 @@
 (function () {
   var resource = 'src/views/carousel';
 
-  var expectToCreateDOMElement = function (node) {
-    expect(node).toBeDefined();
-    expect(node instanceof HTMLElement).toBe(true);
-  };
-
-  define([resource], function (CarouselView) {
+  define([resource, 'test/helpers'], function (CarouselView, helpers) {
     describe(resource, function () {
       beforeEach(function () {
         this.carouselView = new CarouselView();
@@ -22,23 +17,23 @@
         });
 
         it('creates a root element of the view', function () {
-          expectToCreateDOMElement(this.carouselView.el);
+          helpers.expectToHaveDOMElement(this.carouselView.el);
         });
 
         it('creates next button', function () {
-          expectToCreateDOMElement(this.carouselView.btnNext);
+          helpers.expectToHaveDOMElement(this.carouselView.btnNext);
         });
 
         it('creates previous button', function () {
-          expectToCreateDOMElement(this.carouselView.btnPrev);
+          helpers.expectToHaveDOMElement(this.carouselView.btnPrev);
         });
 
         it('creates viewBox', function () {
-          expectToCreateDOMElement(this.carouselView.viewBox);
+          helpers.expectToHaveDOMElement(this.carouselView.viewBox);
         });
 
         it('creates slidesList', function () {
-          expectToCreateDOMElement(this.carouselView.slidesList);
+          helpers.expectToHaveDOMElement(this.carouselView.slidesList);
         });
       });
     });
