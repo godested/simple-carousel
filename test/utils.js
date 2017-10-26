@@ -5,7 +5,9 @@
     describe(resource, function () {
       describe('.isObject(value)', function () {
         it('returns true when value is an object', function () {
-          expect(utils.isObject({})).toBe(true);
+          expect(utils.isObject({
+            testProp: 10
+          })).toBe(true);
         });
 
         it('returns false when value is not an object', function () {
@@ -19,7 +21,9 @@
             true
           ];
 
-          expect(nonObjectValues.every(utils.isObject)).toBe(false);
+          expect(nonObjectValues.every(function (value) {
+            return utils.isObject(value) === false;
+          })).toBe(true);
         });
       });
     });

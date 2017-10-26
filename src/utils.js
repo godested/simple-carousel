@@ -2,7 +2,7 @@ define(function () {
 
   return {
     isObject: function (value) {
-      return value === Object(value);
+      return typeof value === 'object' && !Array.isArray(value) && value !== null;
     }
   };
 });
