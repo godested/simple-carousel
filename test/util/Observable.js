@@ -98,6 +98,13 @@
           
           expect(this.test.observer).toHaveBeenCalledWith(this.test.data);
         });
+        
+        it('resets changed state of Observable', function () {
+          this.subject.setChanged();
+          this.subject.notifyObservers();
+          
+          expect(this.subject.hasChanged()).toBe(false);
+        });
       });
     });
   });

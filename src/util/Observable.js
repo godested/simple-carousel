@@ -43,6 +43,8 @@ define(function () {
       observer(data);
     });
     
+    this.clearChanged();
+    
     return this;
   };
   
