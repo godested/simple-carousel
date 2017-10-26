@@ -1,3 +1,4 @@
+// noinspection JSFileReferences
 require.config({
   paths: {
     src: '../src',
@@ -9,6 +10,7 @@ require.config({
 var specsList = [
   'views/carousel',
   'models/carousel',
+  'util/Observable',
   'utils'
 ];
 
