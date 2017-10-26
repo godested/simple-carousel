@@ -26,6 +26,20 @@
           })).toBe(true);
         });
       });
+
+      describe('.extend(ChildClass, ParentClass)', function () {
+        it('implements inheritance', function () {
+          var Parent = function () {};
+          Parent.prototype.test = function () {return true;};
+          var Child = function () {};
+          utils.extend(Child, Parent);
+
+          var childInstance = new Child();
+
+          expect(childInstance instanceof Parent).toBe(true);
+          expect(childInstance.test()).toBe(true);
+        });
+      });
     });
   });
 })();
