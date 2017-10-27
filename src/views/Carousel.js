@@ -1,53 +1,96 @@
 define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
-    function (CarouselModel, carouselTemplate, utils) {
-      var defaultSettings = {
+  function (CarouselModel, carouselTemplate, utils) {
+    var getDefaultSettings = function () {
+      return {
         template: carouselTemplate,
         model: new CarouselModel()
       };
+    };
 
-      var CarouselView = function CarouselView(settings) {
-        settings = utils.isObject(settings) ? settings : defaultSettings;
+    var CarouselView = function CarouselView(settings) {
+      settings = utils.isObject(settings) ? settings : getDefaultSettings();
 
-        this.el = null;
+      this.el = null;
 
-        this.btnNext = null;
-        this.btnPrev = null;
+      this.btnNext = null;
+      this.btnPrev = null;
 
-        this.viewBox = null;
+      this.viewBox = null;
 
-        this.slidesList = null;
+      this.slidesList = null;
 
-        this.template = settings.template;
-        this.model = settings.model;
-      };
+      this.template = settings.template;
+      this.model = settings.model;
 
-      CarouselView.prototype.classNames = {
-        el: 'carousel'
-      };
+      this.updateContent = this.updateContent.bind(this);
+    };
 
-      CarouselView.prototype.createLayout = function () {
-        this.el = document.createElement('div');
-        this.el.className = this.classNames.el;
+    CarouselView.prototype.classNames = {
+      el: 'carousel'
+    };
 
-        this.el.innerHTML = this.template;
+    CarouselView.prototype.createLayout = function () {
+      this.el = document.createElement('div');
+      this.el.className = this.classNames.el;
+
+      this.el.innerHTML = this.template;
 
 
-        return this.collectChildNodes();
-      };
+      return this.collectChildNodes();
+    };
 
-      CarouselView.prototype.collectChildNodes = function () {
-        this.btnNext = this.el.querySelector('.carousel-btn-next');
-        this.btnPrev = this.el.querySelector('.carousel-btn-prev');
+    CarouselView.prototype.updateDimensions = function () {
+      this.slidesList.style.width = (this.model.items.length * 100) + '%';
 
-        this.viewBox = this.el.querySelector('.carousel-view-box');
-        this.slidesList = this.el.querySelector('.carousel-view-box');
+      var childElements = [].slice.call(this.slidesList.children);
 
-        return this;
-      };
+      childElements.forEach(function (child) {
+        child.style.width = ['calc(100%/', childElements.length, ')'].join('');
+      }.bind(this));
 
-      CarouselView.prototype.render = function () {
-        return this.createLayout();
-      };
+      return this;
+    };
 
-      return CarouselView;
-    });
+    CarouselView.prototype.updateContent = function () {
+      this.slidesList.innerHTML = this.model.items.map(function (item) {
+        return this.createSlide(item);
+      }.bind(this)).join('');
+
+
+      return this.updateDimensions();
+    };
+
+    CarouselView.prototype.createSlide = function (item) {
+      return [
+        '<li class="carousel-slides-list-item">',
+        '<img src="' + item + '" />',
+        '</li>'
+      ].join('');
+    };
+
+    CarouselView.prototype.delegateEvents = function () {
+      this.model.addObserver(this.updateContent);
+      return this;
+    };
+
+
+    CarouselView.prototype.collectChildNodes = function () {
+      this.btnNext = this.el.querySelector('.carousel-btn-next');
+      this.btnPrev = this.el.querySelector('.carousel-btn-prev');
+
+      this.viewBox = this.el.querySelector('.carousel-view-box');
+      this.slidesList = this.el.querySelector('.carousel-slides-list');
+
+      return this;
+    };
+
+    CarouselView.prototype.render = function () {
+      this.createLayout();
+      this.updateContent();
+      this.delegateEvents();
+
+      return this;
+    };
+
+    return CarouselView;
+  });

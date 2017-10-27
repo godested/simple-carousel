@@ -1,5 +1,5 @@
 window.itBehavesLikeChainableMethod = function (methodName) {
-  it('it chainable method', function () {
+  it('is chainable method', function () {
     expect(this.subject[methodName].call(this.subject)).toBe(this.subject);
   });
 };

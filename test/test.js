@@ -8,8 +8,8 @@ require.config({
 });
 
 var specsList = [
-  'views/carousel',
-  'models/carousel',
+  'views/Carousel',
+  'models/Carousel',
   'util/Observable',
   'utils'
 ];
