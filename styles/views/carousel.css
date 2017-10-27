@@ -44,6 +44,11 @@
     bottom: 0;
     margin: 0;
     padding: 0;
+    -webkit-transition: left 0.3s;
+    -moz-transition: left 0.3s;
+    -ms-transition: left 0.3s;
+    -o-transition: left 0.3s;
+    transition: left 0.3s;
 }
 
 .carousel-slides-list-item {
