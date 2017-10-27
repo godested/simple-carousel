@@ -27,10 +27,20 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       this.updateContent = this.updateContent.bind(this);
       this.slideNext = this.slideNext.bind(this);
       this.slidePrevious = this.slidePrevious.bind(this);
+
+      this.handleMouseDown = this.handleMouseDown.bind(this);
+      this.handleMouseUp = this.handleMouseUp.bind(this);
+      this.handleMouseMove = this.handleMouseMove.bind(this);
+
+      this._lastMouse = {
+        clientX: 0,
+        clientY: 0
+      };
     };
 
     CarouselView.prototype.classNames = {
-      el: 'carousel'
+      el: 'carousel',
+      slidesListMoving: 'carousel-slides-list-moving'
     };
 
     CarouselView.prototype.createLayout = function () {
@@ -95,11 +105,63 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       return this.recalculate();
     };
 
+    CarouselView.prototype.handleMouseDown = function () {
+      this.viewBox.addEventListener('mousedown', function (event) {
+        event.preventDefault();
+        this.slidesList.classList.add(this.classNames.slidesListMoving);
+
+        this._lastMouse.clientX = event.clientX;
+        this._lastMouse.clientY = event.clientY;
+
+        document.addEventListener('mousemove', this.handleMouseMove);
+      }.bind(this));
+      return this;
+    };
+
+    CarouselView.prototype.handleMouseUp = function () {
+      document.addEventListener('mouseup', function (event) {
+        event.preventDefault();
+        this.slidesList.classList.remove(this.classNames.slidesListMoving);
+        document.removeEventListener('mousemove', this.handleMouseMove);
+
+        this.setClosesSlide().recalculate();
+      }.bind(this));
+      return this;
+    };
+
+    CarouselView.prototype.setClosesSlide = function () {
+      var left = parseInt(this.slidesList.style.left);
+
+      this.currentSlide = -1 * Math.round(left / this.viewBox.offsetWidth);
+
+      if (left > 0) {
+        this.currentSlide = 0;
+      }
+
+      this.currentSlide = Math.min(this.currentSlide, this.getSlidesCount() - 1);
+
+      return this;
+    };
+
+    CarouselView.prototype.handleMouseMove = function (event) {
+      event.preventDefault();
+      var left = parseInt(this.slidesList.style.left || 0);
+      left -= this._lastMouse.clientX - event.clientX;
+
+      this._lastMouse.clientX = event.clientX;
+      this._lastMouse.clientY = event.clientY;
+
+      this.slidesList.style.left = left + 'px';
+      return this;
+    };
+
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
 
       this.btnNext.addEventListener('click', this.slideNext);
       this.btnPrev.addEventListener('click', this.slidePrevious);
+
+      this.handleMouseDown().handleMouseUp();
       return this;
     };
 

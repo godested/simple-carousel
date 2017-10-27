@@ -51,6 +51,14 @@
     transition: left 0.3s;
 }
 
+.carousel-slides-list.carousel-slides-list-moving {
+    -webkit-transition: none;
+    -moz-transition: none ;
+    -ms-transition: none ;
+    -o-transition: none ;
+    transition: none ;
+}
+
 .carousel-slides-list-item {
     display: inline-block;
     list-style-type: none;
