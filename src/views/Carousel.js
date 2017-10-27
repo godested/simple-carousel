@@ -22,6 +22,8 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       this.template = settings.template;
       this.model = settings.model;
 
+      this.currentSlide = 0;
+
       this.updateContent = this.updateContent.bind(this);
     };
 
@@ -37,6 +39,10 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
 
       return this.collectChildNodes();
+    };
+
+    CarouselView.prototype.getSlidesCount = function () {
+      return this.model.items.length;
     };
 
     CarouselView.prototype.updateDimensions = function () {
@@ -66,6 +72,25 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
         '<img src="' + item + '" />',
         '</li>'
       ].join('');
+    };
+
+    CarouselView.prototype.recalculate = function () {
+      this.slidesList.style.left = this.viewBox.offsetWidth * this.currentSlide + 'px';
+      return this;
+    };
+
+    CarouselView.prototype.slideNext = function () {
+      this.currentSlide = (this.currentSlide + 1) % this.getSlidesCount();
+      return this.recalculate();
+    };
+
+    CarouselView.prototype.slidePrevious = function () {
+      if (this.currentSlide === 0) {
+        this.currentSlide = this.getSlidesCount();
+      }
+
+      this.currentSlide -= 1;
+      return this.recalculate();
     };
 
     CarouselView.prototype.delegateEvents = function () {
