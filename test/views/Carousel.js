@@ -91,6 +91,9 @@
       });
 
       describe('.delegateEvents()', function () {
+        beforeEach(function () {
+          this.subject.createLayout();
+        });
         itBehavesLikeChainableMethod('delegateEvents');
 
         it('sets .updateContent() as model observer', function () {
@@ -184,7 +187,7 @@
             this.subject.recalculate();
             var left = parseInt(this.subject.slidesList.style.left) || 0;
 
-            expect(left).toEqual(this.subject.viewBox.offsetWidth * this.subject.currentSlide);
+            expect(left).toEqual(-this.subject.viewBox.offsetWidth * this.subject.currentSlide);
           });
         });
       });

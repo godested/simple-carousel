@@ -25,6 +25,8 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       this.currentSlide = 0;
 
       this.updateContent = this.updateContent.bind(this);
+      this.slideNext = this.slideNext.bind(this);
+      this.slidePrevious = this.slidePrevious.bind(this);
     };
 
     CarouselView.prototype.classNames = {
@@ -75,7 +77,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     };
 
     CarouselView.prototype.recalculate = function () {
-      this.slidesList.style.left = this.viewBox.offsetWidth * this.currentSlide + 'px';
+      this.slidesList.style.left = -1 * this.viewBox.offsetWidth * this.currentSlide + 'px';
       return this;
     };
 
@@ -95,6 +97,9 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
+
+      this.btnNext.addEventListener('click', this.slideNext);
+      this.btnPrev.addEventListener('click', this.slidePrevious);
       return this;
     };
 
