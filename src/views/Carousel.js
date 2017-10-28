@@ -112,11 +112,11 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     var movingType = ('ontouchstart' in window)? 'touchstart': 'mousedown';
     var moveMethod = (movingType === 'touchstart')? 'touchmove': 'mousemove';
     CarouselView.prototype.handleMouseDown = function () {
-
       this.viewBox.addEventListener(movingType , function (event) {
         event.preventDefault();
+        var touch;
         if (moveMethod === 'touchmove') {
-            var touch = event.touches[0];
+            touch = event.touches[0];
         }
         this.slidesList.classList.add(this.classNames.slidesListMoving);
         this._lastMouse.clientX = event.clientX || touch.pageX;
@@ -156,8 +156,9 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     CarouselView.prototype.handleMouseMove = function (event) {
       event.preventDefault();
       var left = this.getSlidesListLeftPosition();
+      var touch;
         if (moveMethod === 'touchmove') {
-            var touch = event.touches[0];
+            touch = event.touches[0];
         }
       left -= this._lastMouse.clientX - (event.clientX || touch.pageX);
 
