@@ -171,9 +171,9 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
-
-      this.btnNext.addEventListener('click', this.slideNext);
-      this.btnPrev.addEventListener('click', this.slidePrevious);
+      var clickMethod = ('ontouchstart' in window)? 'touchstart': 'click';
+      this.btnNext.addEventListener(clickMethod, this.slideNext);
+      this.btnPrev.addEventListener(clickMethod, this.slidePrevious);
 
       this.handleMouseDown().handleMouseUp();
       return this;
