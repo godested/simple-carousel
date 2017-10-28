@@ -109,24 +109,28 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       return this.recalculate();
     };
 
+    var movingType = ('ontouchstart' in window)? 'touchstart': 'mousedown';
+    var moveMethod = (movingType === 'touchstart')? 'touchmove': 'mousemove';
     CarouselView.prototype.handleMouseDown = function () {
-      this.viewBox.addEventListener('mousedown', function (event) {
+
+      this.viewBox.addEventListener(movingType , function (event) {
         event.preventDefault();
         this.slidesList.classList.add(this.classNames.slidesListMoving);
 
         this._lastMouse.clientX = event.clientX;
         this._lastMouse.clientY = event.clientY;
 
-        document.addEventListener('mousemove', this.handleMouseMove);
+        document.addEventListener(moveMethod, this.handleMouseMove);
       }.bind(this));
       return this;
     };
 
+    var movingTypeEnd = ('ontouchstart' in window)? 'touchend': 'mouseup'
     CarouselView.prototype.handleMouseUp = function () {
-      document.addEventListener('mouseup', function (event) {
+      document.addEventListener(movingTypeEnd, function (event) {
         event.preventDefault();
         this.slidesList.classList.remove(this.classNames.slidesListMoving);
-        document.removeEventListener('mousemove', this.handleMouseMove);
+        document.removeEventListener(moveMethod, this.handleMouseMove);
 
         this.setClosesSlide().recalculate();
       }.bind(this));
