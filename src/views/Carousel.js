@@ -86,6 +86,10 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       ].join('');
     };
 
+    CarouselView.prototype.getSlidesListLeftPosition = function () {
+      return parseInt(this.slidesList.style.left) || 0;
+    };
+
     CarouselView.prototype.recalculate = function () {
       this.slidesList.style.left = -1 * this.viewBox.offsetWidth * this.currentSlide + 'px';
       return this;
@@ -130,7 +134,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     };
 
     CarouselView.prototype.setClosesSlide = function () {
-      var left = parseInt(this.slidesList.style.left);
+      var left = this.getSlidesListLeftPosition();
 
       this.currentSlide = -1 * Math.round(left / this.viewBox.offsetWidth);
 
@@ -145,7 +149,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
     CarouselView.prototype.handleMouseMove = function (event) {
       event.preventDefault();
-      var left = parseInt(this.slidesList.style.left || 0);
+      var left = this.getSlidesListLeftPosition();
       left -= this._lastMouse.clientX - event.clientX;
 
       this._lastMouse.clientX = event.clientX;
