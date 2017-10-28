@@ -115,17 +115,19 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
       this.viewBox.addEventListener(movingType , function (event) {
         event.preventDefault();
+        if (moveMethod === 'touchmove') {
+            var touch = event.touches[0];
+        }
         this.slidesList.classList.add(this.classNames.slidesListMoving);
-
-        this._lastMouse.clientX = event.clientX;
-        this._lastMouse.clientY = event.clientY;
-
+        this._lastMouse.clientX = event.clientX || touch.pageX;
+        this._lastMouse.clientY = event.clientY || touch.pageY;
+        console.log(this._lastMouse.clientX ,this._lastMouse.clientY);
         document.addEventListener(moveMethod, this.handleMouseMove);
       }.bind(this));
       return this;
     };
 
-    var movingTypeEnd = ('ontouchstart' in window)? 'touchend': 'mouseup'
+    var movingTypeEnd = ('ontouchstart' in window)? 'touchend': 'mouseup';
     CarouselView.prototype.handleMouseUp = function () {
       document.addEventListener(movingTypeEnd, function (event) {
         event.preventDefault();
@@ -154,10 +156,13 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     CarouselView.prototype.handleMouseMove = function (event) {
       event.preventDefault();
       var left = this.getSlidesListLeftPosition();
-      left -= this._lastMouse.clientX - event.clientX;
+        if (moveMethod === 'touchmove') {
+            var touch = event.touches[0];
+        }
+      left -= this._lastMouse.clientX - (event.clientX || touch.pageX);
 
-      this._lastMouse.clientX = event.clientX;
-      this._lastMouse.clientY = event.clientY;
+      this._lastMouse.clientX = (event.clientX || touch.pageX);
+      this._lastMouse.clientY = (event.clientY || touch.pageY);
 
       this.slidesList.style.left = left + 'px';
       return this;
