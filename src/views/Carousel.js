@@ -1,5 +1,5 @@
-define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
-  function (CarouselModel, carouselTemplate, utils) {
+define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 'src/control'],
+  function (CarouselModel, carouselTemplate, utils, control) {
     var getDefaultSettings = function () {
       return {
         template: carouselTemplate,
@@ -109,26 +109,23 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
       return this.recalculate();
     };
 
-    var movingType = ('ontouchstart' in window)? 'touchstart': 'mousedown';
-    var moveMethod = (movingType === 'touchstart')? 'touchmove': 'mousemove';
     CarouselView.prototype.handleMouseDown = function () {
-      this.viewBox.addEventListener(movingType , function (event) {
+      this.viewBox.addEventListener(control.movingTypeStart , function (event) {
         event.preventDefault();
 
         this.slidesList.classList.add(this.classNames.slidesListMoving);
         this._lastMouse.clientX = event.clientX || event.touches[0].clientX;
         this._lastMouse.clientY = event.clientY || event.touches[0].clientY;
-        document.addEventListener(moveMethod, this.handleMouseMove);
+        document.addEventListener(control.movingMethod, this.handleMouseMove);
       }.bind(this));
       return this;
     };
 
-    var movingTypeEnd = ('ontouchstart' in window)? 'touchend': 'mouseup';
     CarouselView.prototype.handleMouseUp = function () {
-      document.addEventListener(movingTypeEnd, function (event) {
+      document.addEventListener(control.movingTypeEnd, function (event) {
         event.preventDefault();
         this.slidesList.classList.remove(this.classNames.slidesListMoving);
-        document.removeEventListener(moveMethod, this.handleMouseMove);
+        document.removeEventListener(control.movingMethod, this.handleMouseMove);
 
         this.setClosesSlide().recalculate();
       }.bind(this));
@@ -150,9 +147,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
     };
 
     CarouselView.prototype.handleMouseMove = function (event) {
-        if (moveMethod === 'mousemove'){
             event.preventDefault();
-        }
         var left = this.getSlidesListLeftPosition();
 
         left -= this._lastMouse.clientX - (event.clientX || event.touches[0].clientX);
@@ -166,9 +161,8 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils'],
 
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
-      var clickMethod = ('ontouchstart' in window)? 'touchstart': 'click';
-      this.btnNext.addEventListener(clickMethod, this.slideNext);
-      this.btnPrev.addEventListener(clickMethod, this.slidePrevious);
+      this.btnNext.addEventListener(control.clickMethod, this.slideNext);
+      this.btnPrev.addEventListener(control.clickMethod, this.slidePrevious);
 
       this.handleMouseDown().handleMouseUp();
       return this;
