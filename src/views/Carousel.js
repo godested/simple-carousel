@@ -109,27 +109,23 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
       return this.recalculate();
     };
 
-    CarouselView.prototype.handleMouseDown = function () {
-      this.viewBox.addEventListener(control.movingTypeStart , function (event) {
+    CarouselView.prototype.handleMouseDown = function (event) {
         event.preventDefault();
-
         this.slidesList.classList.add(this.classNames.slidesListMoving);
         this._lastMouse.clientX = event.clientX || event.touches[0].clientX;
         this._lastMouse.clientY = event.clientY || event.touches[0].clientY;
         document.addEventListener(control.movingMethod, this.handleMouseMove);
-      }.bind(this));
-      return this;
+        return this;
     };
 
-    CarouselView.prototype.handleMouseUp = function () {
-      document.addEventListener(control.movingTypeEnd, function (event) {
+    CarouselView.prototype.handleMouseUp = function (event) {
         event.preventDefault();
         this.slidesList.classList.remove(this.classNames.slidesListMoving);
         document.removeEventListener(control.movingMethod, this.handleMouseMove);
 
         this.setClosesSlide().recalculate();
-      }.bind(this));
-      return this;
+
+        return this;
     };
 
     CarouselView.prototype.setClosesSlide = function () {
@@ -147,7 +143,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
     };
 
     CarouselView.prototype.handleMouseMove = function (event) {
-            event.preventDefault();
+        event.preventDefault();
         var left = this.getSlidesListLeftPosition();
 
         left -= this._lastMouse.clientX - (event.clientX || event.touches[0].clientX);
@@ -161,10 +157,13 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
 
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
+
+      this.viewBox.addEventListener(control.movingTypeStart, this.handleMouseDown);
+      document.addEventListener(control.movingTypeEnd, this.handleMouseUp);
+
       this.btnNext.addEventListener(control.clickMethod, this.slideNext);
       this.btnPrev.addEventListener(control.clickMethod, this.slidePrevious);
 
-      this.handleMouseDown().handleMouseUp();
       return this;
     };
 
