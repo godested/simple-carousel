@@ -112,8 +112,8 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
     CarouselView.prototype.handleMouseDown = function (event) {
         event.preventDefault();
         this.slidesList.classList.add(this.classNames.slidesListMoving);
-        this._lastMouse.clientX = event.clientX || event.touches[0].clientX;
-        this._lastMouse.clientY = event.clientY || event.touches[0].clientY;
+        this._lastMouse.clientX = utils.getEventCoordinate(event).x;
+        this._lastMouse.clientY = utils.getEventCoordinate(event).y;
         document.addEventListener(control.movingMethod, this.handleMouseMove);
         return this;
     };
@@ -148,10 +148,10 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
         }
         var left = this.getSlidesListLeftPosition();
 
-        left -= this._lastMouse.clientX - (event.clientX || event.touches[0].clientX);
+        left -= this._lastMouse.clientX - utils.getEventCoordinate(event).x;
 
-        this._lastMouse.clientX = (event.clientX || event.touches[0].clientX);
-        this._lastMouse.clientY = (event.clientY || event.touches[0].clientY);
+        this._lastMouse.clientX = utils.getEventCoordinate(event).x;
+        this._lastMouse.clientY = utils.getEventCoordinate(event).y;
 
         this.slidesList.style.left = left + 'px';
         return this;
