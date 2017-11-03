@@ -1,16 +1,9 @@
 define(['src/utils'],
     function (utils) {
-        var control = {};
-        if(utils.isTouchDevice()) {
-            control.movingTypeStart = 'touchstart';
-            control.movingTypeEnd = 'touchend';
-            control.movingMethod = 'touchmove';
-            control.clickMethod = 'touchstart';
-        } else {
-            control.movingTypeStart = 'mousedown';
-            control.movingTypeEnd ='mouseup';
-            control.movingMethod = 'mousemove';
-            control.clickMethod = 'click';
+        return {
+            movingTypeStart: (utils.isTouchDevice()) ? 'touchstart' : 'mousedown',
+            movingTypeEnd: (utils.isTouchDevice()) ? 'touchend' : 'mouseup',
+            movingMethod: (utils.isTouchDevice()) ? 'touchmove' : 'mousemove',
+            clickMethod: (utils.isTouchDevice()) ? 'touchstart' : 'click'
         }
-        return control
     });
