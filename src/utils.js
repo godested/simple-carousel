@@ -8,6 +8,9 @@ define(function () {
       ChildClass.prototype = Object.create(ParentClass.prototype);
       ChildClass.prototype.constructor = ChildClass;
       ChildClass.superClass = ParentClass;
+    },
+    isTouchDevice: function () {
+        return ('ontouchstart' in window);
     }
   };
 });

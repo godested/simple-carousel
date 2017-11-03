@@ -143,7 +143,9 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
     };
 
     CarouselView.prototype.handleMouseMove = function (event) {
-        event.preventDefault();
+        if (!utils.isTouchDevice()) {
+            event.preventDefault();
+        }
         var left = this.getSlidesListLeftPosition();
 
         left -= this._lastMouse.clientX - (event.clientX || event.touches[0].clientX);
