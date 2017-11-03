@@ -28,6 +28,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
       this.slideNext = this.slideNext.bind(this);
       this.slidePrevious = this.slidePrevious.bind(this);
 
+      this.handleWheel = this.handleWheel.bind(this);
       this.handleMouseDown = this.handleMouseDown.bind(this);
       this.handleMouseUp = this.handleMouseUp.bind(this);
       this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -128,6 +129,19 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
         return this;
     };
 
+    CarouselView.prototype.handleWheel = function (event) {
+        if (!utils.isTouchDevice()) {
+            event.preventDefault();
+        }
+        var left = this.getSlidesListLeftPosition();
+        var delta =  this.deltaY || this.detail || this.wheelDelta;
+        console.log(delta);
+        left -= delta;
+
+        this.slidesList.style.left = left + 'px';
+        return this;
+    };
+
     CarouselView.prototype.setClosesSlide = function () {
       var left = this.getSlidesListLeftPosition();
 
@@ -149,7 +163,6 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
         var left = this.getSlidesListLeftPosition();
 
         left -= this._lastMouse.clientX - utils.getEventCoordinate(event).x;
-
         this._lastMouse.clientX = utils.getEventCoordinate(event).x;
         this._lastMouse.clientY = utils.getEventCoordinate(event).y;
 
@@ -159,6 +172,8 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
 
     CarouselView.prototype.delegateEvents = function () {
       this.model.addObserver(this.updateContent);
+
+      this.viewBox.addEventListener(control.wheelType, this.slideNext);
 
       this.viewBox.addEventListener(control.movingTypeStart, this.handleMouseDown);
       document.addEventListener(control.movingTypeEnd, this.handleMouseUp);
