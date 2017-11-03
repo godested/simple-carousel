@@ -11,6 +11,12 @@ define(function () {
     },
     isTouchDevice: function () {
         return ('ontouchstart' in window);
-    }
+    },
+      getEventCoordinate: function (event) {
+        return {
+            x: (this.isTouchDevice()) ? event.touches[0].clientX : event.clientX,
+            y: (this.isTouchDevice()) ? event.touches[0].clientY : event.clientY
+        }
+      }
   };
 });
