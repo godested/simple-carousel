@@ -32,7 +32,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
       this.slideNext = this.slideNext.bind(this);
       this.slidePrevious = this.slidePrevious.bind(this);
 
-      this.arrowClick = this.arrowClick.bind(this);
+      this.handleKeyboardArrows = this.handleKeyboardArrows.bind(this);
       this.handleWheel = this.handleWheel.bind(this);
       this.handleMouseDown = this.handleMouseDown.bind(this);
       this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -156,7 +156,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
       return this;
     };
 
-    CarouselView.prototype.arrowClick = function(event) {
+    CarouselView.prototype.handleKeyboardArrows = function(event) {
       switch (event.keyCode) {
         case 39 : {
           event.preventDefault();
@@ -209,7 +209,7 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
       document.addEventListener(events.movingTypeEnd, this.handleMouseUp);
 
       this.viewBox.addEventListener('transitionend', this.handleTransitionEnd);
-      document.addEventListener('keydown', this.arrowClick);
+      document.addEventListener('keydown', this.handleKeyboardArrows);
       this.btnNext.addEventListener(events.clickMethod, this.slideNext);
       this.btnPrev.addEventListener(events.clickMethod, this.slidePrevious);
 
