@@ -10,29 +10,13 @@ define(function () {
       ChildClass.superClass = ParentClass;
     },
     isTouchDevice: function () {
-        return ('ontouchstart' in window);
+      return ('ontouchstart' in window);
     },
-      getEventCoordinate: function (event) {
-        return {
-            x: (this.isTouchDevice()) ? event.touches[0].clientX : event.clientX,
-            y: (this.isTouchDevice()) ? event.touches[0].clientY : event.clientY
-        }
-      },
-      wheelType: function (){
-              if (this.addEventListener) {
-                  if ('onwheel' in document) {
-                      // IE9+, FF17+, Ch31+
-                      return "wheel";
-                  } else if ('onmousewheel' in document) {
-                      // устаревший вариант события
-                      return "mousewheel";
-                  } else {
-                      // Firefox < 17
-                      return "MozMousePixelScroll"
-                  }
-              } else { // IE8-
-                  return "onmousewheel";
-              }
+    getEventCoordinate: function (event) {
+      return {
+        x: (this.isTouchDevice()) ? event.touches[0].clientX : event.clientX,
+        y: (this.isTouchDevice()) ? event.touches[0].clientY : event.clientY
       }
+    }
   };
 });
