@@ -10,13 +10,13 @@ define(function () {
       ChildClass.superClass = ParentClass;
     },
     isTouchDevice: function () {
-        return ('ontouchstart' in window);
+      return ('ontouchstart' in window);
     },
-      getEventCoordinate: function (event) {
-        return {
-            x: (this.isTouchDevice()) ? event.touches[0].clientX : event.clientX,
-            y: (this.isTouchDevice()) ? event.touches[0].clientY : event.clientY
-        }
+    getEventCoordinate: function (event) {
+      return {
+        x: (this.isTouchDevice()) ? event.touches[0].clientX : event.clientX,
+        y: (this.isTouchDevice()) ? event.touches[0].clientY : event.clientY
       }
+    }
   };
 });
