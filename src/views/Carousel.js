@@ -102,16 +102,21 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
     };
 
     CarouselView.prototype.slideNext = function() {
-      this.currentSlide = (this.currentSlide + 1) % this.getSlidesCount();
+      if(this.isAnimationFinished) {
+        this.currentSlide = (this.currentSlide + 1) % this.getSlidesCount();
+        this.isAnimationFinished = false;
+      }
       return this.recalculate();
     };
 
     CarouselView.prototype.slidePrevious = function() {
-      if (this.currentSlide === 0) {
-        this.currentSlide = this.getSlidesCount();
+      if(this.isAnimationFinished) {
+        if (this.currentSlide === 0) {
+          this.currentSlide = this.getSlidesCount();
+        }
+        this.currentSlide -= 1;
+        this.isAnimationFinished = false;
       }
-
-      this.currentSlide -= 1;
       return this.recalculate();
     };
 
@@ -146,25 +151,19 @@ define(['src/models/Carousel', 'text!src/templates/carousel.html', 'src/utils', 
 
       var delta = event.deltaY || event.detail || event.wheelDelta;
 
-      if (delta > 0 && this.isAnimationFinished) {
-        this.slideNext();
-        this.isAnimationFinished = false;
-      }
-      if (delta < 0 && this.isAnimationFinished) {
-        this.slidePrevious();
-        this.isAnimationFinished = false;
-      }
+      delta > 0 ? this.slideNext() : this.slidePrevious();
+
       return this;
     };
 
     CarouselView.prototype.arrowClick = function(event) {
       switch (event.keyCode) {
-        case 39: {
+        case 39 : {
           event.preventDefault();
           this.slideNext();
           break;
         }
-        case 37: {
+        case 37 : {
           event.preventDefault();
           this.slidePrevious();
           break;
